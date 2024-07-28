@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html data-theme="light">
+<head>
+    <title>Upload Image</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
+    <script src="https://kit.fontawesome.com/05029c61dd.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Upload Image</h1>
+            <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+                <div class="field">
+                    <div id="file-js" class="file has-name is-boxed">
+                        <label class="file-label">
+                          <input class="file-input" type="file" name="image" />
+                          <span class="file-cta">
+                            <span class="file-icon">
+                              <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label"> Choose a file… </span>
+                          </span>
+                          <span class="file-name"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-link" type="submit">Upload</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
+<script>
+    const fileInput = document.querySelector("#file-js input[type=file]");
+    fileInput.onchange = () => {
+      if (fileInput.files.length > 0) {
+        const fileName = document.querySelector("#file-js .file-name");
+        fileName.textContent = fileInput.files[0].name;
+      }
+    };
+</script>

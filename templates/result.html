@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html data-theme="light">
+<head>
+    <title>Processing Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
+    <script src="https://kit.fontawesome.com/05029c61dd.js" crossorigin="anonymous"></script>
+    <style>
+        .loading {
+            font-size: 2em;
+            text-align: center;
+        }
+    </style>
+    <script>
+        async function checkResult() {
+            const filename = "{{ filename }}";
+            try {
+                const response = await fetch(`/get-result?filename=${filename}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('result').innerText = `Inference Result: ${data.inference}`;
+                } else {
+                    throw new Error('Failed to fetch the result');
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result').innerText = `Error: ${error.message}`;
+            }
+        }
+        window.onload = checkResult;
+    </script>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Processing Result</h1>
+            <div id="loading" class="loading">Loading...</div>
+            <div id="result" class="content"></div>
+        </div>
+    </section>
+</body>
+</html>
