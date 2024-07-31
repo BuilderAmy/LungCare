@@ -38,7 +38,7 @@ def upload():
         
         # Invoke Lambda via API Gateway with the S3 URL
         response = requests.post(
-            'https://jv16aedy33.execute-api.us-east-1.amazonaws.com/Prod/process',
+            'https://jv16aedy33.execute-api.us-east-1.amazonaws.com/Prod/upload',
             json={'imageUrl': s3_url},
             headers={'Content-Type': 'application/json'}
         )
@@ -74,9 +74,10 @@ def upload_to_s3(file_data, filename, content_type):
     bucket_name = '2303826xrayimages'
 
     try:
-        s3.put_object(Bucket=bucket_name, Key=filename, Body=file_data, ContentType=content_type)
-        s3_url = f'https://{bucket_name}.s3.amazonaws.com/{filename}'
+        s3.put_object(Bucket=bucket_name, Key=f'uploads/{filename}', Body=file_data, ContentType=content_type)
+        s3_url = f'https://{bucket_name}.s3.amazonaws.com/uploads/{filename}'
         return s3_url
+    
     except NoCredentialsError:
         return None
 
