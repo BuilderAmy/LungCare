@@ -51,11 +51,13 @@ def upload():
             error_message = result.get('error', 'Unknown error occurred')
             return render_template('error.html', error_message=error_message)
         
-        # Handle the inference result
-        inference_result = result.get('inference', 'No inference result returned')
+        # Get the result from Lambda
+        result = response.json()
+        job_run_id = result.get('jobRunId', 'No jobRunId returned')
+        message = result.get('message', 'No message returned')
         
         # Pass the result to the result page
-        return redirect(url_for('result', filename=custom_id, inference=inference_result))
+        return redirect(url_for('result', filename=new_filename, message=message, jobRunId=job_run_id))
     
     # Redirect to index if no file was processed
     return redirect(url_for('index'))
@@ -63,8 +65,9 @@ def upload():
 @app.route('/result')
 def result():
     filename = request.args.get('filename')
-    inference = request.args.get('inference', 'No inference result')
-    return render_template('result.html', filename=filename, inference=inference)
+    message = request.args.get('message', 'No message returned')
+    job_run_id = request.args.get('jobRunId', 'No jobRunId returned')
+    return render_template('result.html', filename=filename, message=message, job_run_id=job_run_id)
 
 def upload_to_s3(file_data, filename, content_type):
     import boto3
